@@ -1,6 +1,7 @@
 module "resourcegroup" {
-  source = "git::https://bambgiqvuckxxvwjwvbjiasmxzbxt3oiucubtx534nky7at4qn7a@dev.azure.com/p-moosavinezhad/az-iac/_git/az-resourcegroup?ref=main"
-            // https://{PAT}@dev.azure.com/{organization}/{project}/_git/{repo-name}
+  source = "git::https://p-moosavinezhad@dev.azure.com/p-moosavinezhad/az-iac/_git/az-resourcegroup?ref=main"
+           // "git::https://bambgiqvuckxxvwjwvbjiasmxzbxt3oiucubtx534nky7at4qn7a@dev.azure.com/p-moosavinezhad/az-iac/_git/az-resourcegroup?ref=main"
+           // https://{PAT}@dev.azure.com/{organization}/{project}/_git/{repo-name}
 
   region              = var.region
   tags = {
