@@ -3,7 +3,7 @@ module "resourcegroup" {
             // https://{PAT}@dev.azure.com/{organization}/{project}/_git/{repo-name}
 
   region              = var.region
- tags = {
+  tags = {
     Service           = "servivename"
     AssetName         = "Asset Name"
     AssetID           = "AB00CD"
@@ -15,6 +15,5 @@ module "resourcegroup" {
     Owner             = "parisamoosavinezhad@hotmail.com"
     CostCenter        = ""
   }
-  resource_short_name = var.resource_short_name
   resource_long_name  = var.resource_long_name
 }
