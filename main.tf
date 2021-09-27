@@ -27,7 +27,7 @@ module "network" {
   region_short = "we"
   environment = "dev"
   product = "cloudexcellence"
-  resource_long_name = "exc-network"
+  resource_long_name = "cloudexcellence"
   resource_group_name = module.resourcegroup.name
   resource_group_location = module.resourcegroup.location  
 }
