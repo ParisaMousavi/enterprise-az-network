@@ -4,7 +4,7 @@ module "resourcegroup" {
   // https://{PAT}@dev.azure.com/{organization}/{project}/_git/{repo-name}
 
   region             = "westeurope"
-  resource_long_name = "dummy-company-name"
+  resource_long_name = "cloud-excellence"
   tags = {
     Service         = "servivename"
     AssetName       = "Asset Name"
