@@ -19,3 +19,16 @@ module "resourcegroup" {
   }
 
 }
+
+module "network" {
+  source = "git::https://bambgiqvuckxxvwjwvbjiasmxzbxt3oiucubtx534nky7at4qn7a@dev.azure.com/p-moosavinezhad/az-iac/_git/az-vnet?ref=main"
+
+  subscription = "dev"
+  region_short = "we"
+  environment = "dev"
+  product = "cloudexcellence"
+  region             = "westeurope"
+  resource_long_name = "exc-network"
+  resource_group_name = module.resourcegroup.name
+  resource_group_location = module.resourcegroup.location  
+}
