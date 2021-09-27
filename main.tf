@@ -4,12 +4,12 @@ module "resourcegroup" {
   // https://{PAT}@dev.azure.com/{organization}/{project}/_git/{repo-name}
 
   region             = "westeurope"
-  resource_long_name = "cloud-excellence"
+  resource_long_name = "cloud-excellence-network-team"
   tags = {
-    Service         = "servivename"
+    Service         = "network"
     AssetName       = "Asset Name"
     AssetID         = "AB00CD"
-    BusinessUnit    = "Cloud Team"
+    BusinessUnit    = "Network Team"
     Confidentiality = "C1"
     Integrity       = "I1"
     Availability    = "A1"
