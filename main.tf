@@ -55,3 +55,19 @@ module "pip" {
   resource_group_name = module.resourcegroup.name
   resource_group_location = module.resourcegroup.location  
 }
+
+module "vpn_gateway" {
+  source = "git::https://bambgiqvuckxxvwjwvbjiasmxzbxt3oiucubtx534nky7at4qn7a@dev.azure.com/p-moosavinezhad/az-iac/_git/az-vpn-gateway?ref=main"
+ 
+  public_ip_address_id = module.pip.public_ip_ids["p2svpn"]
+  subnet_id = module.network.subnets["GatewaySubnet"].id
+
+  subscription = var.subscription
+  region_short = var.region_short
+  environment = var.environment
+  product = var.product
+  resource_long_name =  local.resource_long_name
+  resource_group_name = module.resourcegroup.name
+  resource_group_location = module.resourcegroup.location  
+}
+
