@@ -59,6 +59,8 @@ module "pip" {
 module "vpn_gateway" {
   source = "git::https://bambgiqvuckxxvwjwvbjiasmxzbxt3oiucubtx534nky7at4qn7a@dev.azure.com/p-moosavinezhad/az-iac/_git/az-vpn-gateway?ref=main"
  
+  depends_on = [module.pip]
+
   public_ip_address_id = module.pip.public_ip_ids["p2svpn"]
   subnet_id = module.network.subnets["GatewaySubnet"].id
 
