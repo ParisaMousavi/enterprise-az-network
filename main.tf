@@ -1,3 +1,7 @@
+locals{
+  resource_long_name="${var.product}-${var.subscription}-${var.region_short}-${var.environment}"
+}
+
 module "resourcegroup" {
   source = "git::https://bambgiqvuckxxvwjwvbjiasmxzbxt3oiucubtx534nky7at4qn7a@dev.azure.com/p-moosavinezhad/az-iac/_git/az-resourcegroup?ref=main"
   // "git::https://bambgiqvuckxxvwjwvbjiasmxzbxt3oiucubtx534nky7at4qn7a@dev.azure.com/p-moosavinezhad/az-iac/_git/az-resourcegroup?ref=main"
@@ -26,11 +30,11 @@ module "resourcegroup" {
 module "network" {
   source = "git::https://bambgiqvuckxxvwjwvbjiasmxzbxt3oiucubtx534nky7at4qn7a@dev.azure.com/p-moosavinezhad/az-iac/_git/az-vnet?ref=main"
 
-  subscription = "dev"
-  region_short = "we"
-  environment = "dev"
-  product = "cloudexcellence"
-  resource_long_name = "cloudexcellence"
+  subscription = var.subscription
+  region_short = var.region_short
+  environment = var.environment
+  product = var.product
+  resource_long_name =  local.resource_long_name
   resource_group_name = module.resourcegroup.name
   resource_group_location = module.resourcegroup.location  
 }
@@ -42,11 +46,12 @@ module "pip" {
   source = "git::https://bambgiqvuckxxvwjwvbjiasmxzbxt3oiucubtx534nky7at4qn7a@dev.azure.com/p-moosavinezhad/az-iac/_git/az-publicip?ref=main"
 
   public_ips = ["p2svpn"]
-  subscription = "dev"
-  region_short = "we"
-  environment = "dev"
-  product = "cloudexcellence"
-  resource_long_name = "cloudexcellence"
+  
+  subscription = var.subscription
+  region_short = var.region_short
+  environment = var.environment
+  product = var.product
+  resource_long_name =  local.resource_long_name
   resource_group_name = module.resourcegroup.name
   resource_group_location = module.resourcegroup.location  
 }
