@@ -20,9 +20,28 @@ module "resourcegroup" {
 
 }
 
+#----------------------------------------------
+#       Enterprise Network
+#----------------------------------------------
 module "network" {
   source = "git::https://bambgiqvuckxxvwjwvbjiasmxzbxt3oiucubtx534nky7at4qn7a@dev.azure.com/p-moosavinezhad/az-iac/_git/az-vnet?ref=main"
 
+  subscription = "dev"
+  region_short = "we"
+  environment = "dev"
+  product = "cloudexcellence"
+  resource_long_name = "cloudexcellence"
+  resource_group_name = module.resourcegroup.name
+  resource_group_location = module.resourcegroup.location  
+}
+
+#----------------------------------------------
+#       Enterprise Point-2-Site
+#----------------------------------------------
+module "pip" {
+  source = "git::https://bambgiqvuckxxvwjwvbjiasmxzbxt3oiucubtx534nky7at4qn7a@dev.azure.com/p-moosavinezhad/az-iac/_git/az-publicip?ref=main"
+
+  public_ips = ["p2svpn"]
   subscription = "dev"
   region_short = "we"
   environment = "dev"
