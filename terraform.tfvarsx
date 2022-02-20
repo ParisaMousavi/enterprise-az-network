@@ -1,7 +1,0 @@
-subscription            = "dev"
-region_short            = "we"
-environment             = "dev"
-product                 = "cloudexcellence"
-resource_long_name      = "dummy_keyvault"
-resource_group_name     = "cloudexcellence_vnet"
-resource_group_location = "westeurope"  
