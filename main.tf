@@ -125,6 +125,27 @@ output "networkwatcher_output" {
   value = module.networkwatcher
 }
 
+module "privatelink_blob" {
+  for_each = toset(local.repetation)
+  source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-dns-zones?ref=main"
+
+  # subscription = "dev"
+  # region_short = "we"
+  # environment = "dev"
+  # product = "${each.value}"
+  subscription_id = ""
+  tenant_id = ""
+  private_zones = ["privatelink.blob.core.windows.net"]
+  resource_long_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
+  resource_group_name     = module.resourcegroup[each.value].name
+  resource_group_location = module.resourcegroup[each.value].location
+}
+
+output "privatelink_blob_output" {
+  value = module.privatelink_blob
+}
+
+
 # module "storageaccount" {
 #   for_each = toset(local.repetation)
 #   source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-storage-account?ref=main"
@@ -137,6 +158,8 @@ output "networkwatcher_output" {
 #   resource_short_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
 #   resource_group_name     = module.resourcegroup[each.value].name
 #   resource_group_location = module.resourcegroup[each.value].location
+#   subnet_id = module.network[each.value].subnets["storage"].id
+#   private_dns_zone_ids = "privatelink.blob.core.windows.net"
 # }
 
 # output "storage_output" {
