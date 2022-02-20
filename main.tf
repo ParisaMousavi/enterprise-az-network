@@ -1,15 +1,17 @@
 locals {
   repetation = ["cloudexcellence"]
-  
+  subscription = "dev"
+  region_short = "we"
+  environment = "dev"
 }
 
 module "resourcegroup" {
   for_each = toset(local.repetation)
   source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-resourcegroup?ref=main"
-  // https://{PAT}@dev.azure.com/{organization}/{project}/_git/{repo-name}
+  # https://{PAT}@dev.azure.com/{organization}/{project}/_git/{repo-name}
 
   region             = "westeurope"
-  resource_long_name = "network-team-${each.value}"
+  resource_long_name = "network-${each.value}"
   tags = {
     Service         = "network"
     AssetName       = "Asset Name"
@@ -32,18 +34,18 @@ module "network" {
   for_each = toset(local.repetation)
   source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-vnet?ref=main"
 
-  subscription            = var.subscription
-  region_short            = var.region_short
-  environment             = var.environment
+  subscription            = local.subscription
+  region_short            = local.region_short
+  environment             = local.environment
   product                 = "${each.value}"
-  resource_long_name      = "${each.value}-${var.subscription}-${var.region_short}-${var.environment}"
+  resource_long_name      = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
   resource_group_name     = module.resourcegroup[each.value].name
   resource_group_location = module.resourcegroup[each.value].location
 }
 
 
 output "network_output" {
-  value = module.network["cloudexcellence"].subnets["bastion"].id
+  value = module.network["cloudexcellence"].subnets
 }
 
 module "pip" {
@@ -88,7 +90,7 @@ module "internal_lb" {
 
   frontend_name = "frontend_1"
   backend_pool_name = "backendend_1"
-  resource_long_name = "${each.value}-${var.subscription}-${var.region_short}-${var.environment}"
+  resource_long_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
   resource_group_name     = module.resourcegroup[each.value].name
   resource_group_location = module.resourcegroup[each.value].location
   frontend_subnet_id = module.network[each.value].subnets["lb-intern"].id
@@ -106,7 +108,59 @@ module "internal_lb" {
   }
 }
 
+module "networkwatcher" {
+  for_each = toset(local.repetation)
+  source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-networkwatcher?ref=main"
 
+  subscription = "dev"
+  region_short = "we"
+  environment = "dev"
+  product = "${each.value}"
+  resource_long_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
+  resource_group_name     = module.resourcegroup[each.value].name
+  resource_group_location = module.resourcegroup[each.value].location
+}
+
+output "networkwatcher_output" {
+  value = module.networkwatcher
+}
+
+# module "storageaccount" {
+#   for_each = toset(local.repetation)
+#   source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-storage-account?ref=main"
+
+#   # subscription = "dev"
+#   # region_short = "we"
+#   # environment = "dev"
+#   # product = "${each.value}"
+#   resource_long_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
+#   resource_short_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
+#   resource_group_name     = module.resourcegroup[each.value].name
+#   resource_group_location = module.resourcegroup[each.value].location
+# }
+
+# output "storage_output" {
+#   value = module.storageaccount
+# }
+
+module "subnet" {
+  for_each = toset(local.repetation)
+  source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-nsg?ref=main"
+
+
+  subnets = module.network["cloudexcellence"].subnets
+  storage_account_id = ""
+  network_watcher_name = module.networkwatcher["cloudexcellence"].name
+  network_watcher_resource_group_name = module.networkwatcher["cloudexcellence"].resource_group_name
+
+  subscription = "dev"
+  region_short = "we"
+  environment = "dev"
+  product = "${each.value}"
+  resource_long_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
+  resource_group_name     = module.resourcegroup[each.value].name
+  resource_group_location = module.resourcegroup[each.value].location
+}
 
 #----------------------------------------------
 #       Enterprise Point-2-Site
@@ -116,9 +170,9 @@ module "internal_lb" {
 
 #   public_ips = ["p2svpn"]
 
-#   subscription            = var.subscription
-#   region_short            = var.region_short
-#   environment             = var.environment
+#   subscription            = local.subscription
+#   region_short            = local.region_short
+#   environment             = local.environment
 #   product                 = var.product
 #   resource_long_name      = local.resource_long_name
 #   resource_group_name     = module.resourcegroup.name
@@ -133,9 +187,9 @@ module "internal_lb" {
 #   public_ip_address_id = module.pip.public_ip_ids["p2svpn"]
 #   subnet_id            = module.network.subnets["GatewaySubnet"].id
 
-#   subscription            = var.subscription
-#   region_short            = var.region_short
-#   environment             = var.environment
+#   subscription            = local.subscription
+#   region_short            = local.region_short
+#   environment             = local.environment
 #   product                 = var.product
 #   resource_long_name      = local.resource_long_name
 #   resource_group_name     = module.resourcegroup.name
