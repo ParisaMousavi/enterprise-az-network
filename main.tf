@@ -1,5 +1,6 @@
 locals {
   repetation = ["cloudexcellence"]
+  
 }
 
 module "resourcegroup" {
@@ -41,6 +42,10 @@ module "network" {
 }
 
 
+output "network_output" {
+  value = module.network["cloudexcellence"].subnets["bastion"].id
+}
+
 module "pip" {
   for_each = toset(local.repetation)
   source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-publicip?ref=main"
@@ -54,6 +59,51 @@ module "pip" {
   resource_group_name     = module.resourcegroup[each.value].name
   resource_group_location = module.resourcegroup[each.value].location
 
+}
+
+output "pip_output" {
+  value = module.pip["cloudexcellence"].public_ip_ids["bastion"]
+}
+
+
+
+module "bastion" {
+  for_each = toset(local.repetation)
+  source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-bastion?ref=main"
+
+  subscription = "dev"
+  region_short = "we"
+  environment = "dev"
+  product = "${each.value}"
+  resource_long_name = "not-used-in-main"
+  resource_group_name     = module.resourcegroup[each.value].name
+  resource_group_location = module.resourcegroup[each.value].location
+  bastion_subnet_id = module.network[each.value].subnets["bastion"].id
+  public_ip_address_id = module.pip[each.value].public_ip_ids["bastion"]
+}
+
+module "internal_lb" {
+  for_each = toset(local.repetation)
+  source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-loadbalancer//internal?ref=main"
+
+  frontend_name = "frontend_1"
+  backend_pool_name = "backendend_1"
+  resource_long_name = "${each.value}-${var.subscription}-${var.region_short}-${var.environment}"
+  resource_group_name     = module.resourcegroup[each.value].name
+  resource_group_location = module.resourcegroup[each.value].location
+  frontend_subnet_id = module.network[each.value].subnets["lb-intern"].id
+  tags = {
+    Service         = "network"
+    AssetName       = "Asset Name"
+    AssetID         = "AB00CD"
+    BusinessUnit    = "Network Team"
+    Confidentiality = "C1"
+    Integrity       = "I1"
+    Availability    = "A1"
+    Criticality     = "Low"
+    Owner           = "parisamoosavinezhad@hotmail.com"
+    CostCenter      = ""
+  }
 }
 
 
