@@ -48,82 +48,82 @@ output "network_output" {
   value = module.network["cloudexcellence"].subnets
 }
 
-module "pip" {
-  for_each = toset(local.repetation)
-  source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-publicip?ref=main"
+# module "pip" {
+#   for_each = toset(local.repetation)
+#   source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-publicip?ref=main"
 
-  public_ip_names = ["bastion"]
-  subscription = "dev"
-  region_short = "we"
-  environment = "dev"
-  product = "${each.value}"
-  resource_long_name = "not-used-in-main"
-  resource_group_name     = module.resourcegroup[each.value].name
-  resource_group_location = module.resourcegroup[each.value].location
+#   public_ip_names = ["bastion"]
+#   subscription = "dev"
+#   region_short = "we"
+#   environment = "dev"
+#   product = "${each.value}"
+#   resource_long_name = "not-used-in-main"
+#   resource_group_name     = module.resourcegroup[each.value].name
+#   resource_group_location = module.resourcegroup[each.value].location
 
-}
+# }
 
-output "pip_output" {
-  value = module.pip["cloudexcellence"].public_ip_ids["bastion"]
-}
+# output "pip_output" {
+#   value = module.pip["cloudexcellence"].public_ip_ids["bastion"]
+# }
 
 
 
-module "bastion" {
-  for_each = toset(local.repetation)
-  source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-bastion?ref=main"
+# module "bastion" {
+#   for_each = toset(local.repetation)
+#   source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-bastion?ref=main"
 
-  subscription = "dev"
-  region_short = "we"
-  environment = "dev"
-  product = "${each.value}"
-  resource_long_name = "not-used-in-main"
-  resource_group_name     = module.resourcegroup[each.value].name
-  resource_group_location = module.resourcegroup[each.value].location
-  bastion_subnet_id = module.network[each.value].subnets["bastion"].id
-  public_ip_address_id = module.pip[each.value].public_ip_ids["bastion"]
-}
+#   subscription = "dev"
+#   region_short = "we"
+#   environment = "dev"
+#   product = "${each.value}"
+#   resource_long_name = "not-used-in-main"
+#   resource_group_name     = module.resourcegroup[each.value].name
+#   resource_group_location = module.resourcegroup[each.value].location
+#   bastion_subnet_id = module.network[each.value].subnets["bastion"].id
+#   public_ip_address_id = module.pip[each.value].public_ip_ids["bastion"]
+# }
 
-module "internal_lb" {
-  for_each = toset(local.repetation)
-  source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-loadbalancer//internal?ref=main"
+# module "internal_lb" {
+#   for_each = toset(local.repetation)
+#   source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-loadbalancer//internal?ref=main"
 
-  frontend_name = "frontend_1"
-  backend_pool_name = "backendend_1"
-  resource_long_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
-  resource_group_name     = module.resourcegroup[each.value].name
-  resource_group_location = module.resourcegroup[each.value].location
-  frontend_subnet_id = module.network[each.value].subnets["lb-intern"].id
-  tags = {
-    Service         = "network"
-    AssetName       = "Asset Name"
-    AssetID         = "AB00CD"
-    BusinessUnit    = "Network Team"
-    Confidentiality = "C1"
-    Integrity       = "I1"
-    Availability    = "A1"
-    Criticality     = "Low"
-    Owner           = "parisamoosavinezhad@hotmail.com"
-    CostCenter      = ""
-  }
-}
+#   frontend_name = "frontend_1"
+#   backend_pool_name = "backendend_1"
+#   resource_long_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
+#   resource_group_name     = module.resourcegroup[each.value].name
+#   resource_group_location = module.resourcegroup[each.value].location
+#   frontend_subnet_id = module.network[each.value].subnets["lb-intern"].id
+#   tags = {
+#     Service         = "network"
+#     AssetName       = "Asset Name"
+#     AssetID         = "AB00CD"
+#     BusinessUnit    = "Network Team"
+#     Confidentiality = "C1"
+#     Integrity       = "I1"
+#     Availability    = "A1"
+#     Criticality     = "Low"
+#     Owner           = "parisamoosavinezhad@hotmail.com"
+#     CostCenter      = ""
+#   }
+# }
 
-module "networkwatcher" {
-  for_each = toset(local.repetation)
-  source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-networkwatcher?ref=main"
+# module "networkwatcher" {
+#   for_each = toset(local.repetation)
+#   source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-networkwatcher?ref=main"
 
-  subscription = "dev"
-  region_short = "we"
-  environment = "dev"
-  product = "${each.value}"
-  resource_long_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
-  resource_group_name     = module.resourcegroup[each.value].name
-  resource_group_location = module.resourcegroup[each.value].location
-}
+#   subscription = "dev"
+#   region_short = "we"
+#   environment = "dev"
+#   product = "${each.value}"
+#   resource_long_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
+#   resource_group_name     = module.resourcegroup[each.value].name
+#   resource_group_location = module.resourcegroup[each.value].location
+# }
 
-output "networkwatcher_output" {
-  value = module.networkwatcher
-}
+# output "networkwatcher_output" {
+#   value = module.networkwatcher
+# }
 
 module "privatelink_blob" {
   for_each = toset(local.repetation)
@@ -140,56 +140,56 @@ output "privatelink_blob_output" {
 }
 
 
-module "storageaccount" {
-  for_each = toset(local.repetation)
-  source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-storage-account?ref=main"
+# module "storageaccount" {
+#   for_each = toset(local.repetation)
+#   source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-storage-account?ref=main"
 
-  # subscription = "dev"
-  # region_short = "we"
-  # environment = "dev"
-  # product = "${each.value}"
-  resource_long_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
-  resource_short_name = "nsgfl${local.subscription}${local.region_short}${local.environment}"
-  resource_group_name     = module.resourcegroup[each.value].name
-  resource_group_location = module.resourcegroup[each.value].location
-  subnet_id = module.network[each.value].subnets["storage"].id
-  private_dns_zone_ids = module.privatelink_blob["cloudexcellence"].private_zone_ids["privatelink.blob.core.windows.net"]
-  tags = {
-    Service         = "network"
-    AssetName       = "Asset Name"
-    AssetID         = "AB00CD"
-    BusinessUnit    = "Network Team"
-    Confidentiality = "C1"
-    Integrity       = "I1"
-    Availability    = "A1"
-    Criticality     = "Low"
-    Owner           = "parisamoosavinezhad@hotmail.com"
-    CostCenter      = ""
-  }  
-}
+#   # subscription = "dev"
+#   # region_short = "we"
+#   # environment = "dev"
+#   # product = "${each.value}"
+#   resource_long_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
+#   resource_short_name = "nsgfl${local.subscription}${local.region_short}${local.environment}"
+#   resource_group_name     = module.resourcegroup[each.value].name
+#   resource_group_location = module.resourcegroup[each.value].location
+#   subnet_id = module.network[each.value].subnets["storage"].id
+#   private_dns_zone_ids = module.privatelink_blob["cloudexcellence"].private_zone_ids["privatelink.blob.core.windows.net"]
+#   tags = {
+#     Service         = "network"
+#     AssetName       = "Asset Name"
+#     AssetID         = "AB00CD"
+#     BusinessUnit    = "Network Team"
+#     Confidentiality = "C1"
+#     Integrity       = "I1"
+#     Availability    = "A1"
+#     Criticality     = "Low"
+#     Owner           = "parisamoosavinezhad@hotmail.com"
+#     CostCenter      = ""
+#   }  
+# }
 
-output "storage_output" {
-  value = module.storageaccount
-}
+# output "storage_output" {
+#   value = module.storageaccount
+# }
 
-module "subnet" {
-  for_each = toset(local.repetation)
-  source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-nsg?ref=main"
+# module "nsg" {
+#   for_each = toset(local.repetation)
+#   source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-nsg?ref=main"
 
 
-  subnets = module.network["cloudexcellence"].subnets
-  storage_account_id = ""
-  network_watcher_name = module.networkwatcher["cloudexcellence"].name
-  network_watcher_resource_group_name = module.networkwatcher["cloudexcellence"].resource_group_name
+#   subnets = module.network["cloudexcellence"].subnets
+#   storage_account_id = ""
+#   network_watcher_name = module.networkwatcher["cloudexcellence"].name
+#   network_watcher_resource_group_name = module.networkwatcher["cloudexcellence"].resource_group_name
 
-  subscription = "dev"
-  region_short = "we"
-  environment = "dev"
-  product = "${each.value}"
-  resource_long_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
-  resource_group_name     = module.resourcegroup[each.value].name
-  resource_group_location = module.resourcegroup[each.value].location
-}
+#   subscription = "dev"
+#   region_short = "we"
+#   environment = "dev"
+#   product = "${each.value}"
+#   resource_long_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
+#   resource_group_name     = module.resourcegroup[each.value].name
+#   resource_group_location = module.resourcegroup[each.value].location
+# }
 
 #----------------------------------------------
 #       Enterprise Point-2-Site
