@@ -26,7 +26,7 @@ steps:
 - task: TerraformTaskV2@2
   inputs:
     provider: 'azurerm'
-    command: 'init'
+    command: 'apply'
     backendServiceArm: 'for-parisa-azure-devops-az-iac'
     backendAzureRmStorageAccountName: 'parisatfstate'
     backendAzureRmContainerName: 'enterprise-network'
