@@ -7,6 +7,10 @@ terraform {
   # }
 
   backend "azurerm" {
+    resource_group_name  = "tfstate"
+    storage_account_name = "parisatfstateaziac"
+    container_name       = "enterprise-network"
+    key                  = "terraform.tfstate"
   }
 
 }
