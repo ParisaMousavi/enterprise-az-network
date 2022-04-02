@@ -11,10 +11,9 @@ pool:
 
 stages:
   - stage: 
-    displayName: 'Test and Validation'
+    displayName: 'Enterprise network'
     jobs:
       - job: 
-        condition: in(variables.Environment, 'dev', 'prod', 'acc')
         continueOnError: false
         steps:
 
