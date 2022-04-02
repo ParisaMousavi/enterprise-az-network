@@ -16,10 +16,10 @@ steps:
   inputs:
     provider: 'azurerm'
     command: 'init'
-    backendServiceArm: 'for-parisa-azure-devops-az-iac'
+    environmentServiceNameAzureRM : 'for-parisa-azure-devops-az-iac'
+    backendAzureRmResourceGroupName: 'tfstate'
     backendAzureRmStorageAccountName: 'parisatfstate'
     backendAzureRmContainerName: 'enterprise-network'
-    backendAzureRmResourceGroupName: 'tfstate'
     backendAzureRmKey: 'terraform.tfstate'
 
 
@@ -27,8 +27,8 @@ steps:
   inputs:
     provider: 'azurerm'
     command: 'apply'
-    backendServiceArm: 'for-parisa-azure-devops-az-iac'
+    environmentServiceNameAzureRM : 'for-parisa-azure-devops-az-iac'
+    backendAzureRmResourceGroupName: 'tfstate'
     backendAzureRmStorageAccountName: 'parisatfstate'
     backendAzureRmContainerName: 'enterprise-network'
-    backendAzureRmResourceGroupName: 'tfstate'
     backendAzureRmKey: 'terraform.tfstate'
