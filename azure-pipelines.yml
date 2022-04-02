@@ -12,8 +12,13 @@ pool:
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
+- task: TerraformTaskV2@2
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    backendServiceArm: 'for-parisa-azure-devops-az-iac'
+    backendAzureRmStorageAccountName: 'parisatfstate'
+    backendAzureRmContainerName: 'enterprise-network'
+    backendAzureRmResourceGroupName: 'tfstate'
+    backendAzureRmKey: 'terraform.tfstate'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
