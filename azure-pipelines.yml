@@ -9,26 +9,37 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-- task: TerraformTaskV2@2
-  inputs:
-    provider: 'azurerm'
-    command: 'init'
-    backendServiceArm: 'for-parisa-azure-devops-az-iac'
-    backendAzureRmResourceGroupName: 'tfstate'
-    backendAzureRmStorageAccountName: 'parisatfstateaziac'
-    backendAzureRmContainerName: 'enterprise-network'
-    backendAzureRmKey: 'terraform.tfstate'
+stages:
+  - stage: 
+    displayName: 'Test and Validation'
+    jobs:
+      - job: 
+        condition: in(variables.Environment, 'dev', 'prod', 'acc')
+        continueOnError: false
+        steps:
 
-
-- task: TerraformTaskV2@2
-  inputs:
-    provider: 'azurerm'
-    command: 'apply'
-    environmentServiceNameAzureRM : 'for-parisa-azure-devops-az-iac'
-    backendAzureRmResourceGroupName: 'tfstate'
-    backendAzureRmStorageAccountName: 'parisatfstateaziac'
-    backendAzureRmContainerName: 'enterprise-network'
-    backendAzureRmKey: 'terraform.tfstate'
+          - task: TerraformInstaller@0
+            displayName: 'Install TF'
+            continueOnError: false
+            inputs:
+              terraformVersion: '1.1.7'
+  
+          - task: TerraformTaskV2@2
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'for-parisa-azure-devops-az-iac'
+              backendAzureRmResourceGroupName: 'tfstate'
+              backendAzureRmStorageAccountName: 'parisatfstateaziac'
+              backendAzureRmContainerName: 'enterprise-network'
+              backendAzureRmKey: 'terraform.tfstate' 
+    
+          - task: TerraformTaskV2@2
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              environmentServiceNameAzureRM : 'for-parisa-azure-devops-az-iac'
+              backendAzureRmResourceGroupName: 'tfstate'
+              backendAzureRmStorageAccountName: 'parisatfstateaziac'
+              backendAzureRmContainerName: 'enterprise-network'
+              backendAzureRmKey: 'terraform.tfstate'
