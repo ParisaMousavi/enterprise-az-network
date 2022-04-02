@@ -16,7 +16,7 @@ steps:
   inputs:
     provider: 'azurerm'
     command: 'init'
-    environmentServiceNameAzureRM : 'for-parisa-azure-devops-az-iac'
+    backendServiceArm: 'for-parisa-azure-devops-az-iac'
     backendAzureRmResourceGroupName: 'tfstate'
     backendAzureRmStorageAccountName: 'parisatfstate'
     backendAzureRmContainerName: 'enterprise-network'
