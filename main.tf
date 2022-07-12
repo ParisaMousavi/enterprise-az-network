@@ -162,8 +162,8 @@ module "storageaccount" {
   private_dns_zone_ids        = null
   pe_subresources             = []
   service_endpoint_subnet_ids = []
-  log_analytics_workspace_id = data.terraform_remote_state.monitoring.outputs.log_analytics_workspace_id
-  ip_rules = []
+  log_analytics_workspace_id  = data.terraform_remote_state.monitoring.outputs.log_analytics_workspace_id
+  ip_rules                    = []
   additional_tags = {
     Service         = "network"
     AssetName       = "Asset Name"
@@ -178,24 +178,21 @@ module "storageaccount" {
   }
 }
 
-# output "storage_output" {
-#   value = module.storageaccount
-# }
-
-# module "nsg" {
-#   source                              = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-nsg?ref=main"
-#   subnets                             = module.network.subnets
-#   storage_account_id                  = ""
-#   network_watcher_name                = module.networkwatcher.name
-#   network_watcher_resource_group_name = module.networkwatcher.resource_group_name
-#   subscription                        = "dev"
-#   region_short                        = "we"
-#   environment                         = "dev"
-#   product                             = var.product
-#   resource_long_name                  = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
-#   resource_group_name                 = module.resourcegroup.name
-#   resource_group_location             = var.location
-# }
+module "nsg" {
+  source                              = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-nsg?ref=main"
+  subnets                             = module.network.subnets
+  storage_account_id                  = module.storageaccount.id
+  network_watcher_name                = module.networkwatcher.name
+  network_watcher_resource_group_name = module.networkwatcher.resource_group_name
+  subscription                        = "dev"
+  region_short                        = "we"
+  environment                         = "dev"
+  product                             = var.product
+  resource_long_name                  = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
+  resource_group_name                 = module.resourcegroup.name
+  resource_group_location             = var.location
+  log_analytics_workspace_id          = data.terraform_remote_state.monitoring.outputs.log_analytics_workspace_id
+}
 
 #----------------------------------------------
 #       Enterprise Point-2-Site
