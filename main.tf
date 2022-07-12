@@ -1,22 +1,28 @@
 locals {
-  repetation = ["cloudexcellence"]
+  product      = "cloudexcellence"
   subscription = "dev"
   region_short = "we"
-  environment = "dev"
+  environment  = "dev"
+}
+
+module "rg_name" {
+  source   = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-naming//rg?ref=main"
+  prefix   = var.prefix
+  name     = var.resource_group_name
+  stage    = var.stage
+  location = var.location
 }
 
 module "resourcegroup" {
-  for_each = toset(local.repetation)
-  source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-resourcegroup?ref=main"
   # https://{PAT}@dev.azure.com/{organization}/{project}/_git/{repo-name}
-
-  region             = "westeurope"
-  resource_long_name = "network-${each.value}"
+  source   = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-resourcegroup?ref=main"
+  location = var.location
+  name     = module.rg_name.result
   tags = {
-    Service         = "network"
+    Service         = "Plat. netexc"
     AssetName       = "Asset Name"
     AssetID         = "AB00CD"
-    BusinessUnit    = "Network Team"
+    BusinessUnit    = "Plat. netexc Team"
     Confidentiality = "C1"
     Integrity       = "I1"
     Availability    = "A1"
@@ -24,28 +30,27 @@ module "resourcegroup" {
     Owner           = "parisamoosavinezhad@hotmail.com"
     CostCenter      = ""
   }
-
 }
 
 #----------------------------------------------
 #       Enterprise Network
 #----------------------------------------------
-module "network" {
-  for_each = toset(local.repetation)
-  source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-vnet?ref=main"
-
-  subscription            = local.subscription
-  region_short            = local.region_short
-  environment             = local.environment
-  product                 = "${each.value}"
-  resource_long_name      = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
-  resource_group_name     = module.resourcegroup[each.value].name
-  resource_group_location = module.resourcegroup[each.value].location
+module "network_name" {
+  source   = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-naming//vnet?ref=main"
+  prefix   = var.prefix
+  stage    = var.stage
+  location = var.location
 }
 
-
-output "network_output" {
-  value = module.network["cloudexcellence"].subnets
+module "network" {
+  source              = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-vnet?ref=main"
+  name                = module.network_name.result
+  location            = module.resourcegroup.location
+  subscription        = local.subscription
+  region_short        = local.region_short
+  environment         = local.environment
+  product             = local.product
+  resource_group_name = module.resourcegroup.name
 }
 
 # module "pip" {
@@ -108,87 +113,86 @@ output "network_output" {
 #   }
 # }
 
-# module "networkwatcher" {
-#   for_each = toset(local.repetation)
-#   source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-networkwatcher?ref=main"
+module "networkwatcher_name" {
+  source   = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-naming//nw?ref=main"
+  prefix   = var.prefix
+  name     = var.resource_group_name
+  stage    = var.stage
+  location = var.location
+}
 
-#   subscription = "dev"
-#   region_short = "we"
-#   environment = "dev"
-#   product = "${each.value}"
-#   resource_long_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
+module "networkwatcher" {
+  source              = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-networkwatcher?ref=main"
+  name                = module.networkwatcher_name.result
+  resource_group_name = module.resourcegroup.name
+  location            = module.resourcegroup.location
+}
+
+output "networkwatcher_output" {
+  value = module.networkwatcher
+}
+
+# module "privatelink_blob" {
+#   for_each = toset(local.repetation)
+#   source   = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-dns-zones?ref=main"
+
+#   private_zones           = ["privatelink.blob.core.windows.net"]
+#   resource_long_name      = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
 #   resource_group_name     = module.resourcegroup[each.value].name
 #   resource_group_location = module.resourcegroup[each.value].location
 # }
 
-# output "networkwatcher_output" {
-#   value = module.networkwatcher
+# output "privatelink_blob_output" {
+#   value = module.privatelink_blob
 # }
 
-module "privatelink_blob" {
-  for_each = toset(local.repetation)
-  source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-dns-zones?ref=main"
-
-  private_zones = ["privatelink.blob.core.windows.net"]
-  resource_long_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
-  resource_group_name     = module.resourcegroup[each.value].name
-  resource_group_location = module.resourcegroup[each.value].location
+module "storageaccount_name" {
+  source   = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-naming//st?ref=main"
+  prefix   = var.prefix
+  name     = var.resource_group_name
+  stage    = var.stage
+  location = var.location
 }
 
-output "privatelink_blob_output" {
-  value = module.privatelink_blob
+module "storageaccount" {
+  source               = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-storage-account?ref=main"
+  name                 = module.storageaccount_name.result
+  resource_group_name  = module.resourcegroup.name
+  location             = module.resourcegroup.location
+  subnet_id            = module.network.subnets["storage"].id
+  private_dns_zone_ids = module.privatelink_blob["cloudexcellence"].private_zone_ids["privatelink.blob.core.windows.net"]
+  pe_subresources      = []
+  tags = {
+    Service         = "network"
+    AssetName       = "Asset Name"
+    AssetID         = "AB00CD"
+    BusinessUnit    = "Network Team"
+    Confidentiality = "C1"
+    Integrity       = "I1"
+    Availability    = "A1"
+    Criticality     = "Low"
+    Owner           = "parisamoosavinezhad@hotmail.com"
+    CostCenter      = ""
+  }
 }
-
-
-# module "storageaccount" {
-#   for_each = toset(local.repetation)
-#   source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-storage-account?ref=main"
-
-#   # subscription = "dev"
-#   # region_short = "we"
-#   # environment = "dev"
-#   # product = "${each.value}"
-#   resource_long_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
-#   resource_short_name = "nsgfl${local.subscription}${local.region_short}${local.environment}"
-#   resource_group_name     = module.resourcegroup[each.value].name
-#   resource_group_location = module.resourcegroup[each.value].location
-#   subnet_id = module.network[each.value].subnets["storage"].id
-#   private_dns_zone_ids = module.privatelink_blob["cloudexcellence"].private_zone_ids["privatelink.blob.core.windows.net"]
-#   tags = {
-#     Service         = "network"
-#     AssetName       = "Asset Name"
-#     AssetID         = "AB00CD"
-#     BusinessUnit    = "Network Team"
-#     Confidentiality = "C1"
-#     Integrity       = "I1"
-#     Availability    = "A1"
-#     Criticality     = "Low"
-#     Owner           = "parisamoosavinezhad@hotmail.com"
-#     CostCenter      = ""
-#   }  
-# }
 
 # output "storage_output" {
 #   value = module.storageaccount
 # }
 
 # module "nsg" {
-#   for_each = toset(local.repetation)
-#   source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-nsg?ref=main"
-
-
-#   subnets = module.network["cloudexcellence"].subnets
-#   storage_account_id = ""
-#   network_watcher_name = module.networkwatcher["cloudexcellence"].name
-#   network_watcher_resource_group_name = module.networkwatcher["cloudexcellence"].resource_group_name
-
-#   subscription = "dev"
-#   region_short = "we"
-#   environment = "dev"
-#   product = "${each.value}"
-#   resource_long_name = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
-#   resource_group_name     = module.resourcegroup[each.value].name
-#   resource_group_location = module.resourcegroup[each.value].location
+#   source                              = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-nsg?ref=main"
+#   subnets                             = module.network.subnets
+#   storage_account_id                  = ""
+#   network_watcher_name                = module.networkwatcher.name
+#   network_watcher_resource_group_name = module.networkwatcher.resource_group_name
+#   subscription                        = "dev"
+#   region_short                        = "we"
+#   environment                         = "dev"
+#   product                             = var.product
+#   resource_long_name                  = "${each.value}-${local.subscription}-${local.region_short}-${local.environment}"
+#   resource_group_name                 = module.resourcegroup.name
+#   resource_group_location             = var.location
 # }
 
 #----------------------------------------------
