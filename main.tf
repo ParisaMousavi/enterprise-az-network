@@ -147,22 +147,24 @@ output "networkwatcher_output" {
 # }
 
 module "storageaccount_name" {
-  source   = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-naming//st?ref=main"
-  prefix   = var.prefix
-  name     = var.resource_group_name
-  stage    = var.stage
-  location = var.location
+  source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-naming//st?ref=main"
+  prefix = var.prefix
+  name   = var.resource_group_name
+  stage  = var.stage
 }
 
 module "storageaccount" {
-  source               = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-storage-account?ref=main"
-  name                 = module.storageaccount_name.result
-  resource_group_name  = module.resourcegroup.name
-  location             = module.resourcegroup.location
-  subnet_id            = module.network.subnets["storage"].id
-  private_dns_zone_ids = module.privatelink_blob["cloudexcellence"].private_zone_ids["privatelink.blob.core.windows.net"]
-  pe_subresources      = []
-  tags = {
+  source                      = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-storage-account?ref=main"
+  name                        = module.storageaccount_name.result
+  resource_group_name         = module.resourcegroup.name
+  location                    = module.resourcegroup.location
+  subnet_id                   = null
+  private_dns_zone_ids        = null
+  pe_subresources             = []
+  service_endpoint_subnet_ids = []
+  log_analytics_workspace_id = data.terraform_remote_state.monitoring.outputs.log_analytics_workspace_id
+  ip_rules = []
+  additional_tags = {
     Service         = "network"
     AssetName       = "Asset Name"
     AssetID         = "AB00CD"
