@@ -16,7 +16,7 @@ variable "stage" {
   default = "dev"
 }
 
-variable "resource_group_name" {
+variable "name" {
   type    = string
   default = "netexc"
 }

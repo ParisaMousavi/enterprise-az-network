@@ -1,20 +1,27 @@
 {
-    "address_space" : ["10.200.128.0/16"],
-    "subnets" : {
-      "func-app" : {
-        "address_prefixes" : [ "10.200.2.0/24" ],
-        "service_endpoints": ["Microsoft.Web"],
-        "delegation": {
-          "hosting_environments": {
-            "name": "Microsoft.Web/serverFarms",
-            "actions": ["Microsoft.Network/virtualNetworks/subnets/action"]
-          }
+  "address_space": [
+    "10.200.128.0/16"
+  ],
+  "dns_servers": [],
+  "subnets": {
+    "func-app": {
+      "address_prefixes": ["10.200.2.0/24"],
+      "service_endpoints": ["Microsoft.Web"],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {
+        "hosting_environments": {
+          "name": "Microsoft.Web/serverFarms",
+          "actions": ["Microsoft.Network/virtualNetworks/subnets/action"]
         }
-      },
-      "aks" : {
-        "address_prefixes" : [ "10.200.4.0/19" ],
-        "service_endpoints": []
       }
+    },
+    "aks": {
+      "address_prefixes": ["10.200.4.0/19"],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
     }
   }
-  
+}

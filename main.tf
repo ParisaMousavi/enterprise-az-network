@@ -1,14 +1,11 @@
-# locals {
-#   product      = "cloudexcellence"
-#   subscription = "dev"
-#   location_shortname = "we"
-#   environment  = "dev"
-# }
+locals {
+  projn = jsondecode(file("${path.module}/config/${var.prefix}-${var.stage}-${var.location_shortname}.json"))
+}
 
 module "rg_name" {
   source             = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-naming//rg?ref=main"
   prefix             = var.prefix
-  name               = var.resource_group_name
+  name               = var.name
   stage              = var.stage
   location_shortname = var.location_shortname
 }
@@ -43,13 +40,13 @@ module "network_name" {
 }
 
 module "network" {
-  source              = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-vnet?ref=main"
+  source              = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-vnet-v2?ref=main"
   name                = module.network_name.result
   location            = module.resourcegroup.location
   resource_group_name = module.resourcegroup.name
-  region_short        = var.location_shortname
-  environment         = var.stage
-  product             = local.product
+  address_space       = local.projn.address_space
+  dns_servers         = local.projn.dns_servers
+  subnets             = local.projn.subnets
 }
 
 # # module "pip" {
