@@ -8,7 +8,7 @@ variable "location" {
 
 variable "prefix" {
   type    = string
-  default = "labor"
+  default = "projn"
 }
 
 variable "stage" {
@@ -19,4 +19,9 @@ variable "stage" {
 variable "resource_group_name" {
   type    = string
   default = "netexc"
+}
+
+variable "location_shortname" {
+  type    = string
+  default = "gwc"
 }
