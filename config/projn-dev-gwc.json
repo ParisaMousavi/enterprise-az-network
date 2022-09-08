@@ -1,7 +1,5 @@
 {
-  "address_space": [
-    "10.200.128.0/16"
-  ],
+  "address_space": ["10.200.0.0/16" ],
   "dns_servers": [],
   "subnets": {
     "func-app": {
@@ -17,7 +15,7 @@
       }
     },
     "aks": {
-      "address_prefixes": ["10.200.4.0/19"],
+      "address_prefixes": ["10.200.96.0/19"],
       "service_endpoints": [],
       "enforce_private_link_service_network_policies": false,
       "enforce_private_link_endpoint_network_policies": false,
