@@ -1,6 +1,3 @@
-//------------------------------------------------
-//    for naming
-//------------------------------------------------
 variable "location" {
   type    = string
   default = "germanywestcentral"
