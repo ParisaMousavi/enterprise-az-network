@@ -20,6 +20,13 @@
       "enforce_private_link_service_network_policies": false,
       "enforce_private_link_endpoint_network_policies": false,
       "delegations": {}
-    }
+    },
+    "aks-ingress-appgw": {
+      "address_prefixes": ["10.200.206.0/24"],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    }    
   }
 }
