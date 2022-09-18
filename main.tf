@@ -65,6 +65,7 @@ module "nsg" {
   name                = module.nsg_name.result
   location            = module.resourcegroup.location
   resource_group_name = module.resourcegroup.name
+  security_rules      = jsondecode("${path.module}/nsg-config/projn-dev-gwc.json")["vms-for-lb"]
 }
 
 
