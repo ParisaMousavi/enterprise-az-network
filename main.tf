@@ -49,6 +49,25 @@ module "network" {
   subnets             = local.projn.subnets
 }
 
+#----------------------------------------------
+#       Enterprise Network
+#----------------------------------------------
+module "nsg_name" {
+  source             = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-naming//nsg?ref=main"
+  prefix             = var.prefix
+  name               = var.name
+  stage              = var.stage
+  location_shortname = var.location_shortname
+}
+
+module "nsg" {
+  source              = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-nsg-v2?ref=main"
+  name                = module.nsg_name.result
+  location            = module.resourcegroup.location
+  resource_group_name = module.resourcegroup.name
+}
+
+
 # # module "pip" {
 # #   for_each = toset(local.repetation)
 # #   source = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-publicip?ref=main"
