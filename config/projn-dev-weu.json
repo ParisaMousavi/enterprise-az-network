@@ -1,0 +1,40 @@
+{
+  "address_space": ["10.200.0.0/16" ],
+  "dns_servers": [],
+  "subnets": {
+    "func-app": {
+      "address_prefixes": ["10.200.2.0/24"],
+      "service_endpoints": ["Microsoft.Web"],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {
+        "hosting_environments": {
+          "name": "Microsoft.Web/serverFarms",
+          "actions": ["Microsoft.Network/virtualNetworks/subnets/action"]
+        }
+      }
+    },
+    "aks": {
+      "address_prefixes": ["10.200.96.0/19"],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    },
+    "aks-ingress-appgw": {
+      "address_prefixes": ["10.200.206.0/24"],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    },
+    "vms-for-lb": {
+      "address_prefixes": ["10.200.0.0/24"],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    }     
+  }
+}
+
