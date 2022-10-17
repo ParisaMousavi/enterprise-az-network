@@ -3,7 +3,7 @@ locals {
 }
 
 module "rg_name" {
-  source             = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-naming//rg?ref=main"
+  source             = "github.com/ParisaMousavi/az-naming//rg?ref=2022.10.07"
   prefix             = var.prefix
   name               = var.name
   stage              = var.stage
@@ -12,20 +12,12 @@ module "rg_name" {
 
 module "resourcegroup" {
   # https://{PAT}@dev.azure.com/{organization}/{project}/_git/{repo-name}
-  source   = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-resourcegroup?ref=main"
+  source   = "github.com/ParisaMousavi/az-resourcegroup?ref=2022.10.07"
   location = var.location
   name     = module.rg_name.result
   tags = {
-    Service         = "Plat. netexc"
-    AssetName       = "Asset Name"
-    AssetID         = "AB00CD"
-    BusinessUnit    = "Plat. netexc Team"
-    Confidentiality = "C1"
-    Integrity       = "I1"
-    Availability    = "A1"
-    Criticality     = "Low"
-    Owner           = "parisamoosavinezhad@hotmail.com"
-    CostCenter      = ""
+    CostCenter = "ABC000CBA"
+    By         = "parisamoosavinezhad@hotmail.com"
   }
 }
 
@@ -33,27 +25,31 @@ module "resourcegroup" {
 #       Enterprise Network
 #----------------------------------------------
 module "network_name" {
-  source             = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-naming//vnet?ref=main"
+  source             = "github.com/ParisaMousavi/az-naming//vnet?ref=main"
   prefix             = var.prefix
   stage              = var.stage
   location_shortname = var.location_shortname
 }
 
 module "network" {
-  source              = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-vnet-v2?ref=main"
+  source              = "github.com/ParisaMousavi/az-vnet-v2?ref=main"
   name                = module.network_name.result
   location            = module.resourcegroup.location
   resource_group_name = module.resourcegroup.name
   address_space       = local.projn.address_space
   dns_servers         = local.projn.dns_servers
   subnets             = local.projn.subnets
+  additional_tags = {
+    CostCenter = "ABC000CBA"
+    By         = "parisamoosavinezhad@hotmail.com"
+  }
 }
 
 #----------------------------------------------
 #       Enterprise Network
 #----------------------------------------------
 module "nsg_name" {
-  source             = "git::https://eh4amjsb2v7ke7yzqzkviryninjny3urbbq3pbkor25hhdbo5kea@dev.azure.com/p-moosavinezhad/az-iac/_git/az-naming//nsg?ref=main"
+  source             = "github.com/ParisaMousavi/az-naming//nsg?ref=main"
   prefix             = var.prefix
   name               = var.name
   stage              = var.stage
