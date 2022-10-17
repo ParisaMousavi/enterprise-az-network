@@ -1,5 +1,5 @@
 locals {
-  projn = jsondecode(file("${path.module}/config/${var.prefix}-${var.stage}-${var.location_shortname}.json"))
+  projn = jsondecode(file("${path.module}/config/${var.prefix}-${var.name}-${var.stage}-${var.location_shortname}.json"))
 }
 
 module "rg_name" {
