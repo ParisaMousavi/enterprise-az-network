@@ -21,8 +21,17 @@
         }
       }
     },
-    "aks": {
-      "address_prefixes": ["10.200.96.0/19"],
+    "aad-aks": {
+      "description" : "10.200.96.0 - 10.200.127.255 (8187 + 5 Azure reserved addresses)",
+      "address_prefixes": ["10.200.96.0/19"], 
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    },
+    "basic-aks": {
+      "description":"10.200.128.0 - 10.200.159.255 (8187 + 5 Azure reserved addresses)",
+      "address_prefixes": ["10.200.128.0/19"],
       "service_endpoints": [],
       "enforce_private_link_service_network_policies": false,
       "enforce_private_link_endpoint_network_policies": false,
