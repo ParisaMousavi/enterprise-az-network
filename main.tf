@@ -7,6 +7,7 @@ module "rg_name" {
   prefix             = var.prefix
   name               = var.name
   stage              = var.stage
+  assembly           = "network"
   location_shortname = var.location_shortname
 }
 
