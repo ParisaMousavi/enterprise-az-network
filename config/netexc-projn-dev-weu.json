@@ -50,7 +50,14 @@
       "enforce_private_link_service_network_policies": false,
       "enforce_private_link_endpoint_network_policies": false,
       "delegations": {}
-    }     
+    },
+    "acr": {
+      "address_prefixes": ["10.200.1.0/24"],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    }          
   }
 }
 
