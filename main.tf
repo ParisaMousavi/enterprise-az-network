@@ -124,10 +124,11 @@ module "nsg_bastion_name" {
 }
 
 module "nsg_bastion" {
-  source              = "github.com/ParisaMousavi/az-nsg-v2?ref=main"
-  name                = module.nsg_bastion_name.result
-  location            = module.resourcegroup.location
-  resource_group_name = module.resourcegroup.name
+  source                     = "github.com/ParisaMousavi/az-nsg-v2?ref=main"
+  name                       = module.nsg_bastion_name.result
+  location                   = module.resourcegroup.location
+  resource_group_name        = module.resourcegroup.name
+  log_analytics_workspace_id = data.terraform_remote_state.monitoring.outputs.log_analytics_workspace_id
   security_rules = [
     {
       name                       = "AllowWebExperienceInbound"
