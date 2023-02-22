@@ -1,5 +1,6 @@
 locals {
-  projn = jsondecode(file("${path.module}/config/${var.prefix}-${var.name}-${var.stage}-${var.location_shortname}.json"))
+  projn     = jsondecode(file("${path.module}/config/${var.prefix}-${var.name}-${var.stage}-${var.location_shortname}.json"))
+  projn_hub = jsondecode(file("${path.module}/config/${var.prefix}-${var.name}-${var.stage}-${var.location_shortname}-hub.json"))
 }
 
 module "rg_name" {
@@ -23,7 +24,7 @@ module "resourcegroup" {
 }
 
 #----------------------------------------------
-#       Enterprise Network
+#       Enterprise Network Spok
 #----------------------------------------------
 module "network_name" {
   source             = "github.com/ParisaMousavi/az-naming//vnet?ref=main"
@@ -45,6 +46,32 @@ module "network" {
     By         = "parisamoosavinezhad@hotmail.com"
   }
 }
+
+#----------------------------------------------
+#       Enterprise Network Hub
+#----------------------------------------------
+module "network_hub_name" {
+  source             = "github.com/ParisaMousavi/az-naming//vnet?ref=main"
+  prefix             = var.prefix
+  stage              = "${var.stage}-hub"
+  location_shortname = var.location_shortname
+}
+
+module "network_hub" {
+  source                     = "github.com/ParisaMousavi/az-vnet-v2?ref=main"
+  name                       = module.network_hub_name.result
+  location                   = module.resourcegroup.location
+  resource_group_name        = module.resourcegroup.name
+  address_space              = local.projn_hub.address_space
+  dns_servers                = local.projn_hub.dns_servers
+  subnets                    = local.projn_hub.subnets
+  log_analytics_workspace_id = data.terraform_remote_state.monitoring.outputs.log_analytics_workspace_id
+  additional_tags = {
+    CostCenter = "ABC000CBA"
+    By         = "parisamoosavinezhad@hotmail.com"
+  }
+}
+
 
 #----------------------------------------------
 #       For Automation Machine
