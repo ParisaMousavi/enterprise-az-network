@@ -1,0 +1,35 @@
+{
+  "address_space": [
+    "10.201.0.0/16"
+  ],
+  "dns_servers": [],
+  "subnets": {
+    "AzureFirewallSubnet": {
+      "address_prefixes": [
+        "10.201.0.0/26"
+      ],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    },
+    "GatewaySubnet": {
+      "address_prefixes": [
+        "10.201.0.64/27"
+      ],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    },
+    "AzureBastionSubnet": {
+      "address_prefixes": [
+        "10.201.0.128/26"
+      ],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    }
+  }
+}

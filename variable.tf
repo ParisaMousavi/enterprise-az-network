@@ -33,3 +33,8 @@ variable "remote_state_resource_group_name" {
   type    = string
   default = "tfstate"
 }
+
+variable "with_watcher" {
+  type    = bool
+  default = false
+}
