@@ -27,3 +27,7 @@ output "resourcegroup" {
     id   = module.resourcegroup.id
   }
 }
+
+output "nsg_id" {
+  value = module.nsg.id
+}
