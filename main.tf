@@ -198,7 +198,7 @@ module "nsg_win" {
     },
     {
       name                       = "HTTP"
-      priority                   = 120
+      priority                   = 140
       direction                  = "Inbound"
       access                     = "Allow"
       protocol                   = "Tcp"
