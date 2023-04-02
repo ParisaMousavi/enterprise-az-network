@@ -1,6 +1,6 @@
 locals {
-  projn     = jsondecode(file("${path.module}/config/${var.prefix}-${var.name}-${var.stage}-${var.location_shortname}.json"))
-  projn_hub = jsondecode(file("${path.module}/config/${var.prefix}-${var.name}-${var.stage}-${var.location_shortname}-hub.json"))
+  projn     = jsondecode(file("${path.module}/config/spoke.json"))
+  projn_hub = jsondecode(file("${path.module}/config/hub.json"))
 }
 
 module "rg_name" {
@@ -103,6 +103,64 @@ module "nsg" {
       source_port_range          = "*"
     },
     {
+      name                       = "SSH"
+      priority                   = 120
+      access                     = "Allow"
+      direction                  = "Inbound"
+      protocol                   = "Tcp"
+      description                = "SSH: Allow inbound from any to 22"
+      destination_address_prefix = "*"
+      destination_port_range     = "22"
+      source_address_prefix      = "*"
+      source_port_range          = "*"
+    }
+    
+  ]
+  additional_tags = {
+    CostCenter = "ABC000CBA"
+    By         = "parisamoosavinezhad@hotmail.com"
+  }
+}
+
+resource "azurerm_subnet_network_security_group_association" "this" {
+  subnet_id                 = module.network.subnets["vm-linux"].id
+  network_security_group_id = module.nsg.id
+}
+
+
+
+#----------------------------------------------
+#       For Win Machine
+#----------------------------------------------
+module "nsg_win_name" {
+  source             = "github.com/ParisaMousavi/az-naming//nsg?ref=main"
+  prefix             = var.prefix
+  name               = var.name
+  stage              = var.stage
+  assembly           = "win"
+  location_shortname = var.location_shortname
+}
+
+# Reference link: https://github.com/Flodu31/Terraform/blob/master/Deploy_New_Environment_Provisioners/modules/2-windows_vm/1-virtual-machine.tf
+module "nsg_win" {
+  source              = "github.com/ParisaMousavi/az-nsg-v2?ref=main"
+  name                = module.nsg_win_name.result
+  location            = module.resourcegroup.location
+  resource_group_name = module.resourcegroup.name
+  security_rules = [
+    {
+      name                       = "HTTPS"
+      priority                   = 100
+      access                     = "Allow"
+      direction                  = "Inbound"
+      protocol                   = "Tcp"
+      description                = "HTTPS: Allow inbound from any to 443"
+      destination_address_prefix = "*"
+      destination_port_range     = "443"
+      source_address_prefix      = "*"
+      source_port_range          = "*"
+    },
+    {
       name                       = "RDP"
       priority                   = 110
       access                     = "Allow"
@@ -125,6 +183,30 @@ module "nsg" {
       destination_port_range     = "22"
       source_address_prefix      = "*"
       source_port_range          = "*"
+    },
+    {
+      name                       = "WinRM"
+      priority                   = 130
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      description                = "WinRm: Allow inbound from any to 5985"
+      source_port_range          = "*"
+      destination_port_range     = "5985"
+      source_address_prefix      = "*"
+      destination_address_prefix = "*"
+    },
+    {
+      name                       = "HTTP"
+      priority                   = 120
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      description                = "HTTP: Allow inbound from any to 80"
+      source_port_range          = "*"
+      destination_port_range     = "80"
+      source_address_prefix      = "*"
+      destination_address_prefix = "*"
     }
   ]
   additional_tags = {
@@ -133,10 +215,12 @@ module "nsg" {
   }
 }
 
-resource "azurerm_subnet_network_security_group_association" "this" {
-  subnet_id                 = module.network.subnets["vm-linux"].id
-  network_security_group_id = module.nsg.id
+resource "azurerm_subnet_network_security_group_association" "this_win" {
+  subnet_id                 = module.network.subnets["vm-win"].id
+  network_security_group_id = module.nsg_win.id
 }
+
+
 
 #----------------------------------------------
 #       For Bastion Subnet

@@ -6,7 +6,7 @@ variable "location" {
 variable "prefix" {
   description = "This can be a team name as well."
   type        = string
-  default     = "netexc"
+  default     = "teamb"
 }
 
 variable "stage" {
@@ -16,7 +16,7 @@ variable "stage" {
 
 variable "name" {
   type    = string
-  default = "projn"
+  default = "projb"
 }
 
 variable "location_shortname" {
