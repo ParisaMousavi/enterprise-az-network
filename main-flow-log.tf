@@ -1,10 +1,10 @@
 
 module "log_flow_storage_name" {
-  source             = "github.com/ParisaMousavi/az-naming//st?ref=main"
-  prefix             = var.prefix
-  name               = var.name
-  stage              = var.stage
-  assembly           = "logf"
+  source   = "github.com/ParisaMousavi/az-naming//st?ref=main"
+  prefix   = var.prefix
+  name     = var.name
+  stage    = var.stage
+  assembly = "logf"
   # location_shortname = var.location_shortname
 }
 

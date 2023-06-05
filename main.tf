@@ -114,7 +114,7 @@ module "nsg" {
       source_address_prefix      = "*"
       source_port_range          = "*"
     }
-    
+
   ]
   additional_tags = {
     CostCenter = "ABC000CBA"

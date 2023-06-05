@@ -1,5 +1,5 @@
 locals {
-  azurecr_private_dns_zone_name = "privatelink.azurecr.io"
+  azurecr_private_dns_zone_name   = "privatelink.azurecr.io"
   vaultcore_private_dns_zone_name = "privatelink.vaultcore.azure.net"
 }
 
