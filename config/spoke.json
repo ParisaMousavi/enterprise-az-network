@@ -122,15 +122,26 @@
       "enforce_private_link_service_network_policies": false,
       "enforce_private_link_endpoint_network_policies": false,
       "delegations": {}
+<<<<<<< HEAD
     },
     "AzureBastionSubnet": {
       "address_prefixes": [
         "10.200.9.0/26"
+=======
+    },    
+    "appgw": {
+      "address_prefixes": [
+        "10.200.9.0/24"
+>>>>>>> 3a1e425b93ff5a9e744ed472b0d51ea2a5645994
       ],
       "service_endpoints": [],
       "enforce_private_link_service_network_policies": false,
       "enforce_private_link_endpoint_network_policies": false,
       "delegations": {}
+<<<<<<< HEAD
     }    
+=======
+    }
+>>>>>>> 3a1e425b93ff5a9e744ed472b0d51ea2a5645994
   }
 }

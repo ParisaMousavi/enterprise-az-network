@@ -215,10 +215,11 @@ module "nsg_win" {
   }
 }
 
-resource "azurerm_subnet_network_security_group_association" "this_win" {
-  subnet_id                 = module.network.subnets["vm-win"].id
-  network_security_group_id = module.nsg_win.id
-}
+
+# resource "azurerm_subnet_network_security_group_association" "this_win" {
+#   subnet_id                 = module.network.subnets["vm-win"].id
+#   network_security_group_id = module.nsg_win.id
+# }
 
 
 

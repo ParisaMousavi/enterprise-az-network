@@ -31,3 +31,7 @@ output "resourcegroup" {
 output "nsg_id" {
   value = module.nsg.id
 }
+
+output "nsg_win_id" {
+  value = module.nsg_win.id
+}
