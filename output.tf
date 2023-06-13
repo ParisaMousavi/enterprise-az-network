@@ -7,6 +7,15 @@ output "network_id" {
 
 }
 
+output "dev" {
+  value = module.network_dv
+}
+
+output "qa" {
+  value = module.network_qa
+}
+
+
 output "privatelink_azurecr_io" {
   value = {
     name = azurerm_private_dns_zone.this_azurecr.name
@@ -18,6 +27,20 @@ output "privatelink_vaultcore_azure_net" {
   value = {
     name = azurerm_private_dns_zone.this_vaultcore.name
     id   = azurerm_private_dns_zone.this_vaultcore.id
+  }
+}
+
+output "privatelink_azurewebsites_net" {
+  value = {
+    name = azurerm_private_dns_zone.this_website.name
+    id   = azurerm_private_dns_zone.this_website.id
+  }
+}
+
+output "privatelink_this_website_scm" {
+  value = {
+    name = azurerm_private_dns_zone.this_website_scm.name
+    id   = azurerm_private_dns_zone.this_website_scm.id
   }
 }
 

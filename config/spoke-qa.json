@@ -1,0 +1,145 @@
+{
+  "address_space": [
+    "10.202.0.0/16"
+  ],
+  "dns_servers": [],
+  "subnets": {
+    "apim": {
+      "address_prefixes": [
+        "10.202.3.0/24"
+      ],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    },
+    "func-app": {
+      "address_prefixes": [
+        "10.202.2.0/24"
+      ],
+      "service_endpoints": [
+        "Microsoft.Web"
+      ],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {
+        "hosting_environments": {
+          "name": "Microsoft.Web/serverFarms",
+          "actions": [
+            "Microsoft.Network/virtualNetworks/subnets/action"
+          ]
+        }
+      }
+    },
+    "aad-aks": {
+      "description": "10.202.96.0 - 10.202.127.255 (8187 + 5 Azure reserved addresses)",
+      "address_prefixes": [
+        "10.202.96.0/19"
+      ],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    },
+    "basic-aks": {
+      "description": "10.202.128.0 - 10.202.159.255 (8187 + 5 Azure reserved addresses)",
+      "address_prefixes": [
+        "10.202.128.0/19"
+      ],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    },
+    "aks-ingress-appgw": {
+      "address_prefixes": [
+        "10.202.206.0/24"
+      ],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    },
+    "vms-for-lb": {
+      "address_prefixes": [
+        "10.202.0.0/24"
+      ],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    },
+    "acr": {
+      "address_prefixes": [
+        "10.202.1.0/24"
+      ],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    },
+    "spg-svc": {
+      "address_prefixes": [
+        "10.202.4.0/24"
+      ],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    },
+    "spg-runtime": {
+      "address_prefixes": [
+        "10.202.5.0/24"
+      ],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    },
+    "vm-linux": {
+      "address_prefixes": [
+        "10.202.6.0/24"
+      ],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    },
+    "vm-win": {
+      "address_prefixes": [
+        "10.202.7.0/24"
+      ],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    },
+    "key-vault": {
+      "address_prefixes": [
+        "10.202.8.0/24"
+      ],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    },
+    "appgw": {
+      "address_prefixes": [
+        "10.202.9.0/24"
+      ],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    },
+    "AzureBastionSubnet": {
+      "address_prefixes": [
+        "10.202.10.0/26"
+      ],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
+    }
+  }
+}

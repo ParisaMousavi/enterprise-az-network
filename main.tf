@@ -1,5 +1,7 @@
 locals {
   projn     = jsondecode(file("${path.module}/config/spoke.json"))
+  projn-dev     = jsondecode(file("${path.module}/config/spoke-dev.json"))
+  projn-qa     = jsondecode(file("${path.module}/config/spoke-qa.json"))
   projn_hub = jsondecode(file("${path.module}/config/hub.json"))
 }
 
@@ -47,6 +49,53 @@ module "network" {
   }
 }
 
+#----------------------------------------------
+#       Enterprise Network Spok - qa
+#----------------------------------------------
+module "network_name_qa" {
+  source             = "github.com/ParisaMousavi/az-naming//vnet?ref=main"
+  prefix             = var.prefix
+  stage              = "qa"
+  location_shortname = var.location_shortname
+}
+
+module "network_qa" {
+  source              = "github.com/ParisaMousavi/az-vnet-v2?ref=main"
+  name                = module.network_name_qa.result
+  location            = module.resourcegroup.location
+  resource_group_name = module.resourcegroup.name
+  address_space       = local.projn-qa.address_space
+  dns_servers         = local.projn-qa.dns_servers
+  subnets             = local.projn-qa.subnets
+  additional_tags = {
+    CostCenter = "ABC000CBA"
+    By         = "parisamoosavinezhad@hotmail.com"
+  }
+}
+
+#----------------------------------------------
+#       Enterprise Network Spok - dv
+#----------------------------------------------
+module "network_name_dv" {
+  source             = "github.com/ParisaMousavi/az-naming//vnet?ref=main"
+  prefix             = var.prefix
+  stage              = "dv"
+  location_shortname = var.location_shortname
+}
+
+module "network_dv" {
+  source              = "github.com/ParisaMousavi/az-vnet-v2?ref=main"
+  name                = module.network_name_dv.result
+  location            = module.resourcegroup.location
+  resource_group_name = module.resourcegroup.name
+  address_space       = local.projn-dev.address_space
+  dns_servers         = local.projn-dev.dns_servers
+  subnets             = local.projn-dev.subnets
+  additional_tags = {
+    CostCenter = "ABC000CBA"
+    By         = "parisamoosavinezhad@hotmail.com"
+  }
+}
 #----------------------------------------------
 #       Enterprise Network Hub
 #----------------------------------------------
