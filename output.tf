@@ -7,15 +7,6 @@ output "network_id" {
 
 }
 
-output "dev" {
-  value = module.network_dv
-}
-
-output "qa" {
-  value = module.network_qa
-}
-
-
 output "privatelink_azurecr_io" {
   value = {
     name = azurerm_private_dns_zone.this_azurecr.name

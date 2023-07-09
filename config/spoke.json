@@ -140,6 +140,16 @@
       "enforce_private_link_service_network_policies": false,
       "enforce_private_link_endpoint_network_policies": false,
       "delegations": {}
+    },
+    "aca": {
+      "address_prefixes": [
+        "10.200.16.0/21"
+      ],
+      "service_endpoints": [],
+      "enforce_private_link_service_network_policies": false,
+      "enforce_private_link_endpoint_network_policies": false,
+      "delegations": {}
     }
   }
 }
+

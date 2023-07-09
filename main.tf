@@ -1,7 +1,7 @@
 locals {
   projn     = jsondecode(file("${path.module}/config/spoke.json"))
-  projn-dev     = jsondecode(file("${path.module}/config/spoke-dev.json"))
-  projn-qa     = jsondecode(file("${path.module}/config/spoke-qa.json"))
+  projn-dev = jsondecode(file("${path.module}/config/spoke-dev.json"))
+  projn-qa  = jsondecode(file("${path.module}/config/spoke-qa.json"))
   projn_hub = jsondecode(file("${path.module}/config/hub.json"))
 }
 
@@ -27,6 +27,8 @@ module "resourcegroup" {
 
 #----------------------------------------------
 #       Enterprise Network Spok
+# https://www.ipaddressguide.com/cidr
+# subnet - aca - "10.200.16.0/21" > [10.200.16.0 - 10.200.23.255]
 #----------------------------------------------
 module "network_name" {
   source             = "github.com/ParisaMousavi/az-naming//vnet?ref=main"
@@ -49,53 +51,6 @@ module "network" {
   }
 }
 
-#----------------------------------------------
-#       Enterprise Network Spok - qa
-#----------------------------------------------
-module "network_name_qa" {
-  source             = "github.com/ParisaMousavi/az-naming//vnet?ref=main"
-  prefix             = var.prefix
-  stage              = "qa"
-  location_shortname = var.location_shortname
-}
-
-module "network_qa" {
-  source              = "github.com/ParisaMousavi/az-vnet-v2?ref=main"
-  name                = module.network_name_qa.result
-  location            = module.resourcegroup.location
-  resource_group_name = module.resourcegroup.name
-  address_space       = local.projn-qa.address_space
-  dns_servers         = local.projn-qa.dns_servers
-  subnets             = local.projn-qa.subnets
-  additional_tags = {
-    CostCenter = "ABC000CBA"
-    By         = "parisamoosavinezhad@hotmail.com"
-  }
-}
-
-#----------------------------------------------
-#       Enterprise Network Spok - dv
-#----------------------------------------------
-module "network_name_dv" {
-  source             = "github.com/ParisaMousavi/az-naming//vnet?ref=main"
-  prefix             = var.prefix
-  stage              = "dv"
-  location_shortname = var.location_shortname
-}
-
-module "network_dv" {
-  source              = "github.com/ParisaMousavi/az-vnet-v2?ref=main"
-  name                = module.network_name_dv.result
-  location            = module.resourcegroup.location
-  resource_group_name = module.resourcegroup.name
-  address_space       = local.projn-dev.address_space
-  dns_servers         = local.projn-dev.dns_servers
-  subnets             = local.projn-dev.subnets
-  additional_tags = {
-    CostCenter = "ABC000CBA"
-    By         = "parisamoosavinezhad@hotmail.com"
-  }
-}
 #----------------------------------------------
 #       Enterprise Network Hub
 #----------------------------------------------
@@ -130,6 +85,7 @@ module "nsg_name" {
   prefix             = var.prefix
   name               = var.name
   stage              = var.stage
+  assembly           = "linux"
   location_shortname = var.location_shortname
 }
 
@@ -162,8 +118,19 @@ module "nsg" {
       destination_port_range     = "22"
       source_address_prefix      = "*"
       source_port_range          = "*"
-    }
-
+    },
+    {
+      name                       = "HTTP"
+      priority                   = 130
+      access                     = "Allow"
+      direction                  = "Inbound"
+      protocol                   = "Tcp"
+      description                = "HTTP: Allow inbound from any to 80"
+      destination_address_prefix = "*"
+      destination_port_range     = "80"
+      source_address_prefix      = "*"
+      source_port_range          = "*"
+    },
   ]
   additional_tags = {
     CostCenter = "ABC000CBA"
@@ -171,10 +138,10 @@ module "nsg" {
   }
 }
 
-resource "azurerm_subnet_network_security_group_association" "this" {
-  subnet_id                 = module.network.subnets["vm-linux"].id
-  network_security_group_id = module.nsg.id
-}
+# resource "azurerm_subnet_network_security_group_association" "this" {
+#   subnet_id                 = module.network.subnets["vm-linux"].id
+#   network_security_group_id = module.nsg.id
+# }
 
 
 
@@ -265,10 +232,10 @@ module "nsg_win" {
 }
 
 
-# resource "azurerm_subnet_network_security_group_association" "this_win" {
-#   subnet_id                 = module.network.subnets["vm-win"].id
-#   network_security_group_id = module.nsg_win.id
-# }
+resource "azurerm_subnet_network_security_group_association" "this_win" {
+  subnet_id                 = module.network.subnets["vm-win"].id
+  network_security_group_id = module.nsg_win.id
+}
 
 
 

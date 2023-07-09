@@ -26,7 +26,7 @@ variable "location_shortname" {
 
 variable "remote_state_storage_account_name" {
   type    = string
-  default = "parisatfstateaziac2weu"
+  default = "parisaterraform"
 }
 
 variable "remote_state_resource_group_name" {
