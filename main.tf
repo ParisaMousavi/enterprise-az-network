@@ -62,6 +62,7 @@ module "network_hub_name" {
 }
 
 module "network_hub" {
+  count                      = var.with_hub == true ? 1 : 0
   source                     = "github.com/ParisaMousavi/az-vnet-v2?ref=main"
   name                       = module.network_hub_name.result
   location                   = module.resourcegroup.location

@@ -43,3 +43,8 @@ variable "with_watcher" {
   type    = bool
   default = false
 }
+
+variable "with_hub" {
+  type    = bool
+  default = false
+}
