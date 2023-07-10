@@ -70,7 +70,7 @@ module "network_hub" {
   address_space              = local.projn_hub.address_space
   dns_servers                = local.projn_hub.dns_servers
   subnets                    = local.projn_hub.subnets
-  log_analytics_workspace_id = data.terraform_remote_state.monitoring.outputs.log_analytics_workspace_id
+  log_analytics_workspace_id = var.with_monitor == true ? data.terraform_remote_state.monitoring.outputs.log_analytics_workspace_id : null
   additional_tags = {
     CostCenter = "ABC000CBA"
     By         = "parisamoosavinezhad@hotmail.com"
@@ -257,7 +257,7 @@ module "nsg_bastion" {
   name                       = module.nsg_bastion_name.result
   location                   = module.resourcegroup.location
   resource_group_name        = module.resourcegroup.name
-  log_analytics_workspace_id = data.terraform_remote_state.monitoring.outputs.log_analytics_workspace_id
+  log_analytics_workspace_id = var.with_monitor == true ? data.terraform_remote_state.monitoring.outputs.log_analytics_workspace_id : null
   security_rules = [
     {
       name                       = "AllowWebExperienceInbound"

@@ -48,3 +48,8 @@ variable "with_hub" {
   type    = bool
   default = false
 }
+
+variable "with_monitor" {
+  type    = bool
+  default = false
+}
