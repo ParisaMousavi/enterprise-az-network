@@ -34,6 +34,11 @@ variable "remote_state_resource_group_name" {
   default = "tfstate"
 }
 
+variable "remote_state_key" {
+  type    = string
+  default = "terraform.tfstate"
+}
+
 variable "with_watcher" {
   type    = bool
   default = false
